@@ -89,3 +89,9 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+int
+sys_‫‪getParentID‬‬(void)
+{
+  return ‫‪getParentID‬‬();
+}

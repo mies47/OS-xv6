@@ -532,3 +532,8 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int getParentID‬‬()
+{
+  return myproc()->parent->pid;
+}
