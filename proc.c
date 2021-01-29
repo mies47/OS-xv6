@@ -15,6 +15,7 @@ struct {
 static struct proc *initproc;
 
 int nextpid = 1;
+int process[NPROC + 1];
 extern void forkret(void);
 extern void trapret(void);
 
@@ -536,7 +537,6 @@ procdump(void)
 int*
 getChildren(int pid)
 {
-  int process[NPROC + 1];
   int added = 0;
   
   // Acquire lock to prevent from counting 

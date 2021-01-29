@@ -89,3 +89,13 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+// return an array of all children's pid
+int*
+sys_getChildren(void){
+  int pid;
+
+  if(argint(0, &pid) < 0)
+    return (int*)-1;
+  return getChildren(pid);
+}
