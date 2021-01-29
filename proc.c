@@ -532,3 +532,27 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int*
+getChildren(int pid)
+{
+  int process[NPROC + 1];
+  int added = 0;
+  
+  // Acquire lock to prevent from counting 
+  // children that are created in the middle
+  acquire(&ptable.lock);
+
+  for(int i = 0; i < NPROC; i++){
+    if(ptable.proc[i].pid > 0 && ptable.proc[i].parent->pid == pid){
+      process[added] = ptable.proc[i].pid;
+      added++;
+    }
+  }
+
+  process[added] = -1;
+
+  release(&ptable.lock);
+
+  return process;
+}
