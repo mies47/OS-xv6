@@ -533,6 +533,27 @@ procdump(void)
   }
 }
 
+void
+getChildren(int* address, int pid)
+{
+  struct proc *p;
+  // Acquire lock to prevent from counting 
+  // children that are created in the middle
+  acquire(&ptable.lock);
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->parent->pid == pid){
+      *address = p->pid;
+      address++;
+    }
+  }
+  
+  *address = -1;
+
+
+  release(&ptable.lock);
+}
+
 int getParentID()
 {
   return myproc()->parent->pid;
