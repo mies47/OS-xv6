@@ -537,3 +537,8 @@ int getParentID()
 {
   return myproc()->parent->pid;
 }
+
+int getSyscallCounter(int num)
+{
+  return myproc()->syscallcounter[num];
+}
