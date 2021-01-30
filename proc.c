@@ -15,7 +15,6 @@ struct {
 static struct proc *initproc;
 
 int nextpid = 1;
-int process[NPROC + 1];
 extern void forkret(void);
 extern void trapret(void);
 
@@ -534,25 +533,23 @@ procdump(void)
   }
 }
 
-int*
-getChildren(int pid)
+void
+getChildren(int* address, int pid)
 {
-  int added = 0;
-  
+  struct proc *p;
   // Acquire lock to prevent from counting 
   // children that are created in the middle
   acquire(&ptable.lock);
 
-  for(int i = 0; i < NPROC; i++){
-    if(ptable.proc[i].pid > 0 && ptable.proc[i].parent->pid == pid){
-      process[added] = ptable.proc[i].pid;
-      added++;
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    if(p->parent->pid == pid){
+      *address = p->pid;
+      address++;
     }
   }
+  
+  *address = -1;
 
-  process[added] = -1;
 
   release(&ptable.lock);
-
-  return process;
 }

@@ -91,11 +91,11 @@ sys_uptime(void)
 }
 
 // return an array of all children's pid
-int*
+void
 sys_getChildren(void){
   int pid;
-
-  if(argint(0, &pid) < 0)
-    return (int*)-1;
-  return getChildren(pid);
+  pid = myproc()->pid;
+  int * x = 0;
+  argptr(0 , (void*)&x , sizeof(*x));
+  getChildren(x , pid);
 }
