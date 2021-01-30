@@ -91,7 +91,7 @@ sys_uptime(void)
 }
 
 int
-sys_‫‪getParentID‬‬(void)
+sys_getParentID(void)
 {
-  return ‫‪getParentID‬‬();
+  return getParentID();
 }
