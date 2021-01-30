@@ -90,6 +90,16 @@ sys_uptime(void)
   return xticks;
 }
 
+// return an array of all children's pid
+void
+sys_getChildren(void){
+  int pid;
+  pid = myproc()->pid;
+  int * x = 0;
+  argptr(0 , (void*)&x , sizeof(*x));
+  getChildren(x , pid);
+}
+
 int
 sys_getParentID(void)
 {

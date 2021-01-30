@@ -120,6 +120,7 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+void            getChildren(int* ,int);
 int             getParentID(void);
 int             getSyscallCounter(int);
 
