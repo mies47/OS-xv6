@@ -230,7 +230,7 @@ exit(void)
   struct proc *curproc = myproc();
   struct proc *p;
   int fd;
-
+  memset(myproc()->syscallcounter, 0, 24*sizeof(myproc()->syscallcounter[0]));
   if(curproc == initproc)
     panic("init exiting");
 
