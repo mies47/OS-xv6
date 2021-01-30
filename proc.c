@@ -230,7 +230,7 @@ exit(void)
   struct proc *curproc = myproc();
   struct proc *p;
   int fd;
-
+  memset(myproc()->syscallcounter, 0, 24*sizeof(myproc()->syscallcounter[0]));
   if(curproc == initproc)
     panic("init exiting");
 
@@ -552,4 +552,14 @@ getChildren(int* address, int pid)
 
 
   release(&ptable.lock);
+}
+
+int getParentID()
+{
+  return myproc()->parent->pid;
+}
+
+int getSyscallCounter(int num)
+{
+  return myproc()->syscallcounter[num];
 }

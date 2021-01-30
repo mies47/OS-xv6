@@ -99,3 +99,20 @@ sys_getChildren(void){
   argptr(0 , (void*)&x , sizeof(*x));
   getChildren(x , pid);
 }
+
+int
+sys_getParentID(void)
+{
+  return getParentID();
+}
+
+int
+sys_getSyscallCounter(void)
+{
+  int n;
+
+  if(argint(0, &n) < 0)
+    return -1;
+  return getSyscallCounter(n);
+
+}
