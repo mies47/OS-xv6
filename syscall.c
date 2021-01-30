@@ -139,9 +139,11 @@ syscall(void)
   struct proc *curproc = myproc();
 
   num = curproc->tf->eax;
+  
   int x = curproc->syscallcounter[num];
   x++;
   curproc->syscallcounter[num] = x;
+  
   if(num > 0 && num < NELEM(syscalls) && syscalls[num]) {
     curproc->tf->eax = syscalls[num]();
   } else {
