@@ -599,3 +599,20 @@ int getSyscallCounter(int num)
 {
   return myproc()->syscallcounter[num];
 }
+
+// change a process priority
+void
+setPriority(int priority , int pid){
+  struct proc *p;
+  int procPriority = priority;
+  // Invalid priority
+  if(priority > 6 || priority < 1) procPriority = 5;
+
+  acquire(&ptable.lock);
+
+  for(p = ptable.proc ; p < &ptable.proc[NPROC] ; p++){
+    if(p->pid == pid) p->priority = procPriority;
+  }
+
+  release(&ptable.lock);
+} 
