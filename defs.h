@@ -123,6 +123,7 @@ void            yield(void);
 void            getChildren(int* ,int);
 int             getParentID(void);
 int             getSyscallCounter(int);
+void            setPriority(int , int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
