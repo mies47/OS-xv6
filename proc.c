@@ -88,6 +88,7 @@ allocproc(void)
 
 found:
   p->state = EMBRYO;
+  p->timeslice = QUANTUM;
   p->pid = nextpid++;
 
   // Set default priority
