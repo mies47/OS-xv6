@@ -88,6 +88,8 @@ allocproc(void)
 
 found:
   p->state = EMBRYO;
+  p->extra_timeslice = QUANTUM;
+  p->curr_timeslice = 0;
   p->pid = nextpid++;
 
   // Set default priority
@@ -115,6 +117,11 @@ found:
   p->context = (struct context*)sp;
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
+
+  p->creationTime = ticks;
+  p->readyTime = 0;
+  p->runningTime = 0;
+  p->sleepingTime = 0;
 
   return p;
 }
@@ -337,7 +344,6 @@ scheduler(void)
     sti();
 
     acquire(&ptable.lock);
-
     // Normal scheduling of xv6
     if(schedulingState == 0){
       // Loop over process table looking for process to run.
@@ -351,6 +357,29 @@ scheduler(void)
         c->proc = p;
         switchuvm(p);
         p->state = RUNNING;
+
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
+
+        // Process is done running for now.
+        // It should have changed its p->state before coming back.
+        c->proc = 0;
+      }
+    }
+    // Customize Round-Robin scheduling
+    if(schedulingState == 1){
+      // Loop over process table looking for process to run.
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
+
+        // Switch to chosen process.  It is the process's job
+        // to release ptable.lock and then reacquire it
+        // before jumping back to us.
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
+        p->curr_timeslice = p->extra_timeslice;
 
         swtch(&(c->scheduler), p->context);
         switchkvm();
@@ -618,3 +647,34 @@ setPriority(int priority){
 
   release(&ptable.lock);
 } 
+
+// Returns CPU Burst Time(running time)
+uint
+getCBT()
+{
+  return myproc()->runningTime;
+}
+
+// Returns calling process trunAroundTime
+uint
+getTurnAround(){
+  struct proc *p = myproc();
+  return (p->terminTime - p->creationTime);
+}
+
+// Returns calling process waitingTime
+uint
+getWaiting(){
+  struct proc *p = myproc();
+  return (p->sleepingTime + p->readyTime);
+}
+
+void changePolicy(int n)
+{
+  if(n == 0)
+    schedulingState = 0;
+  if(n == 1)
+    schedulingState = 1;
+  if(n == 2)
+    schedulingState = 2;
+}

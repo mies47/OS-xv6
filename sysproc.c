@@ -122,3 +122,28 @@ sys_setPriority(void)
   if(argint(0 , &n) >= 0)
     setPriority(n);
 }
+
+uint
+sys_getCBT(void){
+  return getCBT();
+}
+
+uint
+sys_getTurnAround(void){
+  return getTurnAround();
+}
+
+uint
+sys_getWaiting(void){
+  return getWaiting();
+}
+
+void
+sys_changePolicy(void)
+{
+  int n;
+
+  if(argint(0, &n) < 0)
+    return;
+  return changePolicy(n);
+ }
