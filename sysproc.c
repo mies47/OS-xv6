@@ -116,3 +116,18 @@ sys_getSyscallCounter(void)
   return getSyscallCounter(n);
 
 }
+
+uint
+sys_getCBT(void){
+  return getCBT();
+}
+
+uint
+sys_getTurnAround(void){
+  return getTurnAround();
+}
+
+uint
+sys_getWaiting(void){
+  return getWaiting();
+}

@@ -23,3 +23,6 @@
 #define SYS_getParentID 22
 #define SYS_getChildren 23
 #define SYS_getSyscallCounter 24
+#define SYS_getCBT 25
+#define SYS_getTurnAround 26
+#define SYS_getWaiting 27
