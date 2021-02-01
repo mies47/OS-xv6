@@ -31,6 +31,7 @@ uint getCBT(void);
 uint getTurnAround(void);
 uint getWaiting(void);
 void changePolicy(int);
+void my_acquire(int);
 
 // ulib.c
 int stat(const char*, struct stat*);

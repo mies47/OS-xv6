@@ -111,6 +111,7 @@ extern int sys_getCBT(void);
 extern int sys_getTurnAround(void);
 extern int sys_getWaiting(void);
 extern int sys_changePolicy(void);
+extern int sys_my_acquire(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -142,6 +143,7 @@ static int (*syscalls[])(void) = {
 [SYS_getTurnAround] sys_getTurnAround,
 [SYS_getWaiting]  sys_getWaiting,
 [SYS_changePolicy]    sys_changePolicy,      
+[SYS_my_acquire]  sys_my_acquire,
 };
 
 void

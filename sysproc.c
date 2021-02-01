@@ -146,4 +146,14 @@ sys_changePolicy(void)
   if(argint(0, &n) < 0)
     return;
   return changePolicy(n);
- }
+}
+
+void
+sys_my_acquire(void)
+{
+  int n;
+
+  if(argint(0, &n) < 0)
+    return;
+  my_acquire(n);
+}
