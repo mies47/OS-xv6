@@ -570,8 +570,9 @@ procdump(void)
 }
 
 void
-getChildren(int* address, int pid)
+getChildren(int* address)
 {
+  int pid = myproc()->pid;
   struct proc *p;
   // Acquire lock to prevent from counting 
   // children that are created in the middle
@@ -602,7 +603,8 @@ int getSyscallCounter(int num)
 
 // change a process priority
 void
-setPriority(int priority , int pid){
+setPriority(int priority){
+  int pid = myproc()->pid;
   struct proc *p;
   int procPriority = priority;
   // Invalid priority

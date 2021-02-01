@@ -120,10 +120,10 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
-void            getChildren(int* ,int);
+void            getChildren(int*);
 int             getParentID(void);
 int             getSyscallCounter(int);
-void            setPriority(int , int);
+void            setPriority(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
