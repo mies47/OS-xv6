@@ -88,7 +88,8 @@ allocproc(void)
 
 found:
   p->state = EMBRYO;
-  p->timeslice = QUANTUM;
+  p->extra_timeslice = QUANTUM;
+  p->curr_timeslice = 0;
   p->pid = nextpid++;
 
   // Set default priority
@@ -338,7 +339,6 @@ scheduler(void)
     sti();
 
     acquire(&ptable.lock);
-
     // Normal scheduling of xv6
     if(schedulingState == 0){
       // Loop over process table looking for process to run.
@@ -352,6 +352,29 @@ scheduler(void)
         c->proc = p;
         switchuvm(p);
         p->state = RUNNING;
+
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
+
+        // Process is done running for now.
+        // It should have changed its p->state before coming back.
+        c->proc = 0;
+      }
+    }
+    // Customize Round-Robin scheduling
+    if(schedulingState == 1){
+      // Loop over process table looking for process to run.
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
+
+        // Switch to chosen process.  It is the process's job
+        // to release ptable.lock and then reacquire it
+        // before jumping back to us.
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
+        p->curr_timeslice = p->extra_timeslice;
 
         swtch(&(c->scheduler), p->context);
         switchkvm();
@@ -599,4 +622,14 @@ int getParentID()
 int getSyscallCounter(int num)
 {
   return myproc()->syscallcounter[num];
+}
+
+void changePolicy(int n)
+{
+  if(n == 0)
+    schedulingState = 0;
+  if(n == 1)
+    schedulingState = 1;
+  if(n == 2)
+    schedulingState = 2;
 }

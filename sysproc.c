@@ -116,3 +116,12 @@ sys_getSyscallCounter(void)
   return getSyscallCounter(n);
 
 }
+ void
+ sys_changePolicy(void)
+ {
+  int n;
+
+  if(argint(0, &n) < 0)
+    return;
+  return changePolicy(n);
+ }

@@ -105,10 +105,10 @@ trap(struct trapframe *tf)
   if(myproc() && myproc()->state == RUNNING &&
      tf->trapno == T_IRQ0+IRQ_TIMER){
     
-    int current = myproc()->timeslice;
+    int current = myproc()->curr_timeslice;
     
     if ( current > 0 ) {
-      myproc()->timeslice = current - 1;
+      myproc()->curr_timeslice = current - 1;
     }
     else
       yield();
