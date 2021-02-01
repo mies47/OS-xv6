@@ -27,3 +27,5 @@
 #define SYS_getTurnAround 26
 #define SYS_getWaiting 27
 #define SYS_changePolicy 28
+#define SYS_setPriority 29
+

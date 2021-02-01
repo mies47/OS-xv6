@@ -93,11 +93,9 @@ sys_uptime(void)
 // return an array of all children's pid
 void
 sys_getChildren(void){
-  int pid;
-  pid = myproc()->pid;
   int * x = 0;
   argptr(0 , (void*)&x , sizeof(*x));
-  getChildren(x , pid);
+  getChildren(x);
 }
 
 int
@@ -115,6 +113,14 @@ sys_getSyscallCounter(void)
     return -1;
   return getSyscallCounter(n);
 
+}
+
+void
+sys_setPriority(void)
+{
+  int n;
+  if(argint(0 , &n) >= 0)
+    setPriority(n);
 }
 
 uint

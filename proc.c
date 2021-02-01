@@ -599,8 +599,9 @@ procdump(void)
 }
 
 void
-getChildren(int* address, int pid)
+getChildren(int* address)
 {
+  int pid = myproc()->pid;
   struct proc *p;
   // Acquire lock to prevent from counting 
   // children that are created in the middle
@@ -628,6 +629,24 @@ int getSyscallCounter(int num)
 {
   return myproc()->syscallcounter[num];
 }
+
+// change a process priority
+void
+setPriority(int priority){
+  int pid = myproc()->pid;
+  struct proc *p;
+  int procPriority = priority;
+  // Invalid priority
+  if(priority > 6 || priority < 1) procPriority = 5;
+
+  acquire(&ptable.lock);
+
+  for(p = ptable.proc ; p < &ptable.proc[NPROC] ; p++){
+    if(p->pid == pid) p->priority = procPriority;
+  }
+
+  release(&ptable.lock);
+} 
 
 // Returns CPU Burst Time(running time)
 uint

@@ -10,7 +10,8 @@ int main(void){
     int n4 = fork();
     if(n1 > 0 && n2 > 0 && n3 > 0 && n4 > 0){
         int* add = malloc(NPROC);
-        getChildren(add ,n1);
+        printf(1 , "This is process %d and children are " , getpid());
+        getChildren(add);
         while(*add != -1){
             printf(1 , "%d/" , *add);
             add++;
