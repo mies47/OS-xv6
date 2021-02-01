@@ -116,9 +116,25 @@ sys_getSyscallCounter(void)
   return getSyscallCounter(n);
 
 }
- void
- sys_changePolicy(void)
- {
+
+uint
+sys_getCBT(void){
+  return getCBT();
+}
+
+uint
+sys_getTurnAround(void){
+  return getTurnAround();
+}
+
+uint
+sys_getWaiting(void){
+  return getWaiting();
+}
+
+void
+sys_changePolicy(void)
+{
   int n;
 
   if(argint(0, &n) < 0)

@@ -118,6 +118,11 @@ found:
   memset(p->context, 0, sizeof *p->context);
   p->context->eip = (uint)forkret;
 
+  p->creationTime = ticks;
+  p->readyTime = 0;
+  p->runningTime = 0;
+  p->sleepingTime = 0;
+
   return p;
 }
 
@@ -622,6 +627,27 @@ int getParentID()
 int getSyscallCounter(int num)
 {
   return myproc()->syscallcounter[num];
+}
+
+// Returns CPU Burst Time(running time)
+uint
+getCBT()
+{
+  return myproc()->runningTime;
+}
+
+// Returns calling process trunAroundTime
+uint
+getTurnAround(){
+  struct proc *p = myproc();
+  return (p->terminTime - p->creationTime);
+}
+
+// Returns calling process waitingTime
+uint
+getWaiting(){
+  struct proc *p = myproc();
+  return (p->sleepingTime + p->readyTime);
 }
 
 void changePolicy(int n)

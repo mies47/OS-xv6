@@ -106,6 +106,9 @@ extern int sys_uptime(void);
 extern int sys_getChildren(void);
 extern int sys_getParentID(void);
 extern int sys_getSyscallCounter(void);
+extern int sys_getCBT(void);
+extern int sys_getTurnAround(void);
+extern int sys_getWaiting(void);
 extern int sys_changePolicy(void);
 
 static int (*syscalls[])(void) = {
@@ -133,6 +136,9 @@ static int (*syscalls[])(void) = {
 [SYS_getChildren] sys_getChildren,
 [SYS_getParentID]    sys_getParentID,
 [SYS_getSyscallCounter]    sys_getSyscallCounter,
+[SYS_getCBT]  sys_getCBT,
+[SYS_getTurnAround] sys_getTurnAround,
+[SYS_getWaiting]  sys_getWaiting,
 [SYS_changePolicy]    sys_changePolicy,      
 };
 
