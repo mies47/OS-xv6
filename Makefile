@@ -185,6 +185,7 @@ UPROGS=\
     _getParentIDtest\
 	_getSyscallCountertest\
 	_changePolicy\
+	_roundRobinTest\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -256,7 +257,8 @@ EXTRA=\
 	ln.c ls.c mkdir.c rm.c stressfs.c usertests.c wc.c zombie.c\
 	getParentIDtest.c\
 	getSyscallCountertest.c\
-	_changePolicy.c\
+	changePolicy.c\
+	roundRobinTest.c\
 	printf.c umalloc.c\
 	getChildrenTest.c\
 	README dot-bochsrc *.pl toc.* runoff runoff1 runoff.list\
