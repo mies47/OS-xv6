@@ -29,6 +29,8 @@ int getSyscallCounter(int);
 uint getCBT(void);
 uint getTurnAround(void);
 uint getWaiting(void);
+void changePolicy(int);
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);

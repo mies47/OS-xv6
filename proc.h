@@ -55,7 +55,9 @@ struct proc {
   uint runningTime;
   uint readyTime;
   uint sleepingTime;
-
+  int priority;                // Priority number for priority scheduling
+  int curr_timeslice;
+  int extra_timeslice;               
 };
 
 // Process memory is laid out contiguously, low addresses first:

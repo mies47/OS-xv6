@@ -131,3 +131,13 @@ uint
 sys_getWaiting(void){
   return getWaiting();
 }
+
+void
+sys_changePolicy(void)
+{
+  int n;
+
+  if(argint(0, &n) < 0)
+    return;
+  return changePolicy(n);
+ }

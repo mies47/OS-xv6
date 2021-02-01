@@ -15,6 +15,7 @@ struct {
 static struct proc *initproc;
 
 int nextpid = 1;
+int schedulingState = 0;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -87,8 +88,13 @@ allocproc(void)
 
 found:
   p->state = EMBRYO;
+  p->extra_timeslice = QUANTUM;
+  p->curr_timeslice = 0;
   p->pid = nextpid++;
 
+  // Set default priority
+  p->priority = 3;
+  
   release(&ptable.lock);
 
   // Allocate kernel stack.
@@ -328,6 +334,8 @@ void
 scheduler(void)
 {
   struct proc *p;
+  struct proc *chosen;
+  int selectedPriority = 7;
   struct cpu *c = mycpu();
   c->proc = 0;
   
@@ -335,26 +343,78 @@ scheduler(void)
     // Enable interrupts on this processor.
     sti();
 
-    // Loop over process table looking for process to run.
     acquire(&ptable.lock);
-    for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE)
-        continue;
+    // Normal scheduling of xv6
+    if(schedulingState == 0){
+      // Loop over process table looking for process to run.
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
 
-      // Switch to chosen process.  It is the process's job
-      // to release ptable.lock and then reacquire it
-      // before jumping back to us.
-      c->proc = p;
-      switchuvm(p);
-      p->state = RUNNING;
+        // Switch to chosen process.  It is the process's job
+        // to release ptable.lock and then reacquire it
+        // before jumping back to us.
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
 
-      swtch(&(c->scheduler), p->context);
-      switchkvm();
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
 
-      // Process is done running for now.
-      // It should have changed its p->state before coming back.
-      c->proc = 0;
+        // Process is done running for now.
+        // It should have changed its p->state before coming back.
+        c->proc = 0;
+      }
     }
+    // Customize Round-Robin scheduling
+    if(schedulingState == 1){
+      // Loop over process table looking for process to run.
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state != RUNNABLE)
+          continue;
+
+        // Switch to chosen process.  It is the process's job
+        // to release ptable.lock and then reacquire it
+        // before jumping back to us.
+        c->proc = p;
+        switchuvm(p);
+        p->state = RUNNING;
+        p->curr_timeslice = p->extra_timeslice;
+
+        swtch(&(c->scheduler), p->context);
+        switchkvm();
+
+        // Process is done running for now.
+        // It should have changed its p->state before coming back.
+        c->proc = 0;
+      }
+    }else if (schedulingState == 1) // Priority Scheduling
+    {
+      for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+        if(p->state == RUNNABLE && p->priority < selectedPriority){
+          chosen = p;
+          selectedPriority = p->priority;
+        }
+      }
+
+      if(selectedPriority < 7){
+        // Switch to chosen process.  It is the process's job
+        // to release ptable.lock and then reacquire it
+        // before jumping back to us.
+        c->proc = chosen;
+        switchuvm(chosen);
+        chosen->state = RUNNING;
+
+        swtch(&(c->scheduler), chosen->context);
+        switchkvm();
+
+        // Process is done running for now.
+        // It should have changed its p->state before coming back.
+        c->proc = 0;
+      }
+    }
+    
+    
     release(&ptable.lock);
 
   }
@@ -588,4 +648,14 @@ uint
 getWaiting(){
   struct proc *p = myproc();
   return (p->sleepingTime + p->readyTime);
+}
+
+void changePolicy(int n)
+{
+  if(n == 0)
+    schedulingState = 0;
+  if(n == 1)
+    schedulingState = 1;
+  if(n == 2)
+    schedulingState = 2;
 }
