@@ -388,7 +388,7 @@ scheduler(void)
         // It should have changed its p->state before coming back.
         c->proc = 0;
       }
-    }else if (schedulingState == 1) // Priority Scheduling
+    }else if (schedulingState == 2) // Priority Scheduling
     {
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
         if(p->state == RUNNABLE && p->priority < selectedPriority){
@@ -677,4 +677,8 @@ void changePolicy(int n)
     schedulingState = 1;
   if(n == 2)
     schedulingState = 2;
+}
+
+void my_acquire(int index){
+  cprintf("/%d/:/%d/\n" , myproc()->pid , index);
 }

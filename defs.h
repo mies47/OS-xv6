@@ -128,6 +128,7 @@ uint            getCBT(void);
 uint            getTurnAround(void);
 uint            getWaiting(void);
 void            changePolicy(int);
+void            my_acquire(int);
 
 // swtch.S
 void            swtch(struct context**, struct context*);
