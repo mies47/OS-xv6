@@ -94,6 +94,7 @@ found:
 
   // Set default priority
   p->priority = 3;
+  // if(highestPriority > 3) highestPriority = 3;
   
   release(&ptable.lock);
 
@@ -274,6 +275,7 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
+  curproc->terminTime = ticks;
   sched();
   panic("zombie exit");
 }
@@ -357,7 +359,7 @@ scheduler(void)
         c->proc = p;
         switchuvm(p);
         p->state = RUNNING;
-
+        p->runningTime++;
         swtch(&(c->scheduler), p->context);
         switchkvm();
 
@@ -394,6 +396,7 @@ scheduler(void)
         if(p->state == RUNNABLE && p->priority < selectedPriority){
           chosen = p;
           selectedPriority = p->priority;
+          // cprintf("%d\n" , selectedPriority);
         }
       }
 
@@ -401,21 +404,23 @@ scheduler(void)
         // Switch to chosen process.  It is the process's job
         // to release ptable.lock and then reacquire it
         // before jumping back to us.
+        // cprintf("%d / %d / %d\n" ,cpuid() , selectedPriority , chosen->pid);
         c->proc = chosen;
         switchuvm(chosen);
         chosen->state = RUNNING;
-
         swtch(&(c->scheduler), chosen->context);
         switchkvm();
 
         // Process is done running for now.
         // It should have changed its p->state before coming back.
         c->proc = 0;
+        selectedPriority = 7;
       }
     }
     
     
     release(&ptable.lock);
+    // countTime();
 
   }
 }
@@ -645,6 +650,7 @@ setPriority(int priority){
     if(p->pid == pid) p->priority = procPriority;
   }
 
+ 
   release(&ptable.lock);
 } 
 
@@ -659,7 +665,7 @@ getCBT()
 uint
 getTurnAround(){
   struct proc *p = myproc();
-  return (p->terminTime - p->creationTime);
+  return (p->runningTime + p->readyTime + p->sleepingTime);
 }
 
 // Returns calling process waitingTime
@@ -679,6 +685,51 @@ void changePolicy(int n)
     schedulingState = 2;
 }
 
+void
+countTime(void){
+  struct proc *p;
+  // Acquire lock to prevent from counting 
+  // children that are created in the middle
+  acquire(&ptable.lock);
+
+  for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
+    switch (p->state)
+    {
+      case RUNNABLE:
+        (p->readyTime)++;
+        break;
+      case RUNNING:
+        (p->runningTime)++;
+        break;
+      case SLEEPING:
+        p->sleepingTime++;
+        break;
+      // case ZOMBIE:
+      //   p->terminTime = ticks;
+      //   break;
+      default:
+        break;
+    }
+  }
+  
+
+
+  release(&ptable.lock);
+}
 void my_acquire(int index){
+  if(index == -1){
+    cprintf("CBT %d is: %d\n" , myproc()->pid , getCBT());
+    return;
+  }else if (index == -2)
+  {
+    cprintf("Waiting %d is: %d\n" , myproc()->pid , getWaiting());
+    return;
+  }else if (index == -3)
+  {
+    cprintf("TurnAround %d is: %d\n" , myproc()->pid ,getTurnAround());
+    return;
+  }
+  
+  
   cprintf("/%d/:/%d/\n" , myproc()->pid , index);
 }
