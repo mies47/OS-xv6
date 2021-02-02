@@ -53,25 +53,9 @@ trap(struct trapframe *tf)
   switch(tf->trapno){
   case T_IRQ0 + IRQ_TIMER:
     if(cpuid() == 0){
-      struct proc *p = myproc();
       acquire(&tickslock);
-      if(p != 0){
-        switch (p->state)
-        {
-        case RUNNABLE:
-          p->readyTime++;
-          break;
-        case RUNNING:
-          p->runningTime++;
-        case SLEEPING:
-          p->sleepingTime++;
-        case ZOMBIE:
-          p->terminTime = ticks;
-        default:
-          break;
-        }
-      }
       ticks++;
+      countTime();
       wakeup(&ticks);
       release(&tickslock);
     }

@@ -153,7 +153,7 @@ sys_my_acquire(void)
 {
   int n;
 
-  if(argint(0, &n) < 0)
-    return;
+  argint(0, &n);
+    // return;
   my_acquire(n);
 }
