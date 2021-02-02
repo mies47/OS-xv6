@@ -151,9 +151,10 @@ sys_changePolicy(void)
 void
 sys_my_acquire(void)
 {
-  int n;
+  int n , m;
 
   argint(0, &n);
+  argint(1 , &m);
     // return;
-  my_acquire(n);
+  my_acquire(n , m);
 }
