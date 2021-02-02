@@ -90,6 +90,7 @@ found:
   p->state = EMBRYO;
   p->extra_timeslice = QUANTUM;
   p->curr_timeslice = 0;
+  p->tickcounter = 0;
   p->pid = nextpid++;
 
   // Set default priority
@@ -457,6 +458,7 @@ yield(void)
 {
   acquire(&ptable.lock);  //DOC: yieldlock
   myproc()->state = RUNNABLE;
+  myproc()->tickcounter = 0;
   sched();
   release(&ptable.lock);
 }
@@ -711,7 +713,7 @@ countTime(void){
         break;
     }
   }
-  
+  cprintf("ticks is %d \n", ticks);
 
 
   release(&ptable.lock);
@@ -732,4 +734,9 @@ void my_acquire(int index){
   
   
   cprintf("/%d/:/%d/\n" , myproc()->pid , index);
+}
+
+int getPolicy()
+{
+  return schedulingState;
 }

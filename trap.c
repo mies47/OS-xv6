@@ -56,6 +56,7 @@ trap(struct trapframe *tf)
       acquire(&tickslock);
       ticks++;
       countTime();
+      
       wakeup(&ticks);
       release(&tickslock);
     }
@@ -111,12 +112,13 @@ trap(struct trapframe *tf)
   // If interrupts were on while locks held, would need to check nlock.
   if(myproc() && myproc()->state == RUNNING &&
      tf->trapno == T_IRQ0+IRQ_TIMER){
+    if(getPolicy() == 1){
+      if(myproc()->tickcounter >= QUANTUM){
+        yield();
+     }
+      myproc()->tickcounter++;
+     }
     
-    int current = myproc()->curr_timeslice;
-    
-    if ( current > 0 ) {
-      myproc()->curr_timeslice = current - 1;
-    }
     else
       yield();
   }
