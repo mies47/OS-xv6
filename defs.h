@@ -128,7 +128,7 @@ uint            getCBT(void);
 uint            getTurnAround(void);
 uint            getWaiting(void);
 void            changePolicy(int);
-void            my_acquire(int);
+void            my_acquire(int ,int);
 void            countTime(void);
 
 // swtch.S

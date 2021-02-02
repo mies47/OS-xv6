@@ -15,7 +15,7 @@ struct {
 static struct proc *initproc;
 
 int nextpid = 1;
-int schedulingState = 0;
+int schedulingState = 1;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -275,7 +275,7 @@ exit(void)
 
   // Jump into the scheduler, never to return.
   curproc->state = ZOMBIE;
-  curproc->terminTime = ticks;
+  // curproc->terminTime = ticks;
   sched();
   panic("zombie exit");
 }
@@ -308,6 +308,7 @@ wait(void)
         p->name[0] = 0;
         p->killed = 0;
         p->state = UNUSED;
+        p->terminTime = ticks;
         release(&ptable.lock);
         return pid;
       }
@@ -315,6 +316,7 @@ wait(void)
 
     // No point waiting if we don't have any children.
     if(!havekids || curproc->killed){
+      p->terminTime = ticks;
       release(&ptable.lock);
       return -1;
     }
@@ -396,7 +398,6 @@ scheduler(void)
         if(p->state == RUNNABLE && p->priority < selectedPriority){
           chosen = p;
           selectedPriority = p->priority;
-          // cprintf("%d\n" , selectedPriority);
         }
       }
 
@@ -414,6 +415,7 @@ scheduler(void)
         // Process is done running for now.
         // It should have changed its p->state before coming back.
         c->proc = 0;
+        chosen = 0;
         selectedPriority = 7;
       }
     }
@@ -716,20 +718,20 @@ countTime(void){
 
   release(&ptable.lock);
 }
-void my_acquire(int index){
+void my_acquire(int i , int index){
   if(index == -1){
-    cprintf("CBT %d is: %d\n" , myproc()->pid , getCBT());
+    cprintf("CBT %d is: %d\n" , i , getCBT());
     return;
   }else if (index == -2)
   {
-    cprintf("Waiting %d is: %d\n" , myproc()->pid , getWaiting());
+    cprintf("Waiting %d is: %d\n" , i , getWaiting());
     return;
   }else if (index == -3)
   {
-    cprintf("TurnAround %d is: %d\n" , myproc()->pid ,getTurnAround());
+    cprintf("TurnAround %d is: %d\n" , i ,getTurnAround());
     return;
   }
   
   
-  cprintf("/%d/:/%d/\n" , myproc()->pid , index);
+  cprintf("/%d/:/%d/\n" , i , index);
 }
