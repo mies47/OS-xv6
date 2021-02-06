@@ -131,6 +131,7 @@ void            changePolicy(int);
 void            my_acquire(int ,int);
 void            countTime(void);
 int             getPolicy(void);
+int             mywait(int* , int* , int*);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

@@ -29,3 +29,4 @@
 #define SYS_changePolicy 28
 #define SYS_setPriority 29
 #define SYS_my_acquire  30
+#define SYS_mywait  31

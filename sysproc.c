@@ -158,3 +158,13 @@ sys_my_acquire(void)
     // return;
   my_acquire(n , m);
 }
+
+int
+sys_mywait(void){
+  int* CBT , *waiting, *TA = 0;
+  argptr(0 , (void *)&CBT , sizeof(*CBT));
+  argptr(1 , (void *)&waiting , sizeof(*waiting));
+  argptr(2 , (void *)&TA , sizeof(*TA));
+
+  return mywait(CBT , waiting, TA);
+}

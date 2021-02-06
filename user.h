@@ -32,6 +32,7 @@ uint getTurnAround(void);
 uint getWaiting(void);
 void changePolicy(int);
 void my_acquire(int ,int);
+int mywait(int *, int* ,int*);
 
 // ulib.c
 int stat(const char*, struct stat*);
