@@ -15,7 +15,7 @@ struct {
 static struct proc *initproc;
 
 int nextpid = 1;
-int schedulingState = 1;
+int schedulingState;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -88,8 +88,8 @@ allocproc(void)
 
 found:
   p->state = EMBRYO;
-  p->extra_timeslice = QUANTUM;
-  p->curr_timeslice = 0;
+  // p->extra_timeslice = QUANTUM;
+  // p->curr_timeslice = 0;
   p->tickcounter = 0;
   p->pid = nextpid++;
 
@@ -384,7 +384,7 @@ scheduler(void)
         c->proc = p;
         switchuvm(p);
         p->state = RUNNING;
-        p->curr_timeslice = p->extra_timeslice;
+        //p->curr_timeslice = p->extra_timeslice;
 
         swtch(&(c->scheduler), p->context);
         switchkvm();
@@ -715,7 +715,6 @@ countTime(void){
         break;
     }
   }
-  cprintf("ticks is %d \n", ticks);
 
 
   release(&ptable.lock);
