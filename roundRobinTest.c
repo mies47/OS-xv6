@@ -5,56 +5,53 @@
 
 
 int main(void){
+    int CBT[10];
+    int waiting[10];
+    int TA[10];
+    int pids[10];
     int pid;
-    uint CBT[10];
-    uint waiting[10];
-    uint TA[10];
-
+    int totalCBT = 0;
+    int totalWaiting = 0;
+    int totalTA = 0;
     for (int i = 0; i < 10; i++)
     {
-        CBT[i] = 0;
-        waiting[i] = 0;
-        TA[i] = 0;
-        pid = fork();
-        if(pid == 0){
-            for (int j = 1; j <100; j++)
+        pids[i] = fork();
+        if(pids[i] == 0){
+            
+            for (int j = 1; j <500; j++)
             {
-                printf(1 , "/%d/ : /%d/\n" , i , j);
+                printf(1 , "\n/%d/ : /%d/\n" , pids[i] , j);
             }
 
-
-            while(wait() != -1);
-            CBT[i] = getCBT();
-            waiting[i] = getWaiting();
-            TA[i] = getTurnAround();
-            printf(1 , "CBT is: %d\n" , CBT[i]);
-            printf(1 , "Waiting is: %d\n" , waiting[i]);
-            printf(1 , "TurnAround is: %d\n" , TA[i]);
-            // my_acquire(i , -1);
-            // my_acquire(i , -2);
-            // my_acquire(i , -3);
-            sleep(1);
             exit();            
         }
     }
-
     
-
-    while(wait() != -1);
-    sleep(1);
-    uint totalCBT = 0;
-    uint totalwaiting = 0;
-    uint totalTA = 0;
     for (int i = 0; i < 10; i++)
     {
-        totalCBT += CBT[i];
-        totalwaiting += waiting[i];
-        totalTA += TA[i];
-    }
+        pid = mywait(&CBT[i] , &waiting[i] , &TA[i]);
 
-    printf(1, "Average CBT is: %d\n" , (uint) (totalCBT / 10));
-    printf(1, "Average waiting is: %d\n" , (uint) (totalwaiting / 10));
-    printf(1, "Average turnAround is: %d\n" , (uint) (totalTA / 10));
+        totalCBT+= CBT[i];
+        totalWaiting+= waiting[i];
+        totalTA += TA[i];
+        
+        printf(1 , "CBT %d is: %d\n" , pid, CBT[i]);
+        printf(1 , "Waiting %d is: %d\n" ,pid, waiting[i]);
+        printf(1 , "TurnAround %d is: %d\n" ,pid, TA[i]);
+        
+    }
+    
+
+    
+    printf(1, "Average CBT is: %d\n" , (int)(totalCBT / 10));
+    printf(1, "Average waiting is: %d\n" , (int) (totalWaiting/ 10));
+    printf(1, "Average turnAround is: %d\n" , (int) (totalTA / 10));
+
+    
+    while(wait() != -1);
+
+    sleep(1);
+
     
     exit();
     

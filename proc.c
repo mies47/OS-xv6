@@ -15,7 +15,7 @@ struct {
 static struct proc *initproc;
 
 int nextpid = 1;
-int schedulingState;
+int schedulingState = 0;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -399,6 +399,7 @@ scheduler(void)
     // Normal scheduling of xv6
     if(schedulingState == 0){
       // Loop over process table looking for process to run.
+      
       for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
         if(p->state != RUNNABLE)
           continue;
@@ -409,7 +410,6 @@ scheduler(void)
         c->proc = p;
         switchuvm(p);
         p->state = RUNNING;
-        p->runningTime++;
         swtch(&(c->scheduler), p->context);
         switchkvm();
 
