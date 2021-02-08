@@ -168,3 +168,11 @@ sys_mywait(void){
 
   return mywait(CBT , waiting, TA);
 }
+
+void sys_setQuantum(void){
+  int n;
+
+  if(argint(0, &n) < 0)
+    return;
+  return setQuantum(n);
+}

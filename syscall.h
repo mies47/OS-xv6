@@ -30,3 +30,4 @@
 #define SYS_setPriority 29
 #define SYS_my_acquire  30
 #define SYS_mywait  31
+#define SYS_setQuantum 32

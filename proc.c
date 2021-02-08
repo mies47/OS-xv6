@@ -16,6 +16,7 @@ static struct proc *initproc;
 
 int nextpid = 1;
 int schedulingState = 0;
+int quantum = 10 ;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -787,4 +788,14 @@ void my_acquire(int i , int index){
 int getPolicy()
 {
   return schedulingState;
+}
+
+void setQuantum(int n)
+{
+  quantum = n;
+}
+
+int getQuantum()
+{
+  return quantum;
 }

@@ -187,6 +187,7 @@ UPROGS=\
 	_prioritySchedTest\
 	_changePolicy\
 	_roundRobinTest\
+	_RRQuantumTest\
 
 fs.img: mkfs README $(UPROGS)
 	./mkfs fs.img README $(UPROGS)
@@ -260,6 +261,7 @@ EXTRA=\
 	getSyscallCountertest.c\
 	changePolicy.c\
 	roundRobinTest.c\
+	RRQuantumTest.c\
 	printf.c umalloc.c\
 	prioritySchedTest.c\
 	getChildrenTest.c\
