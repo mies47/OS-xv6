@@ -20,9 +20,9 @@ int main(void){
             if(i < 5) setPriority(6);
             if(i > 4 && i < 10) setPriority(5);
             if(i > 24) setPriority(1);
-            for (int j = 1; j <20; j++)
+            for (int j = 1; j <= 250; j++)
             {
-                printf(1 , "\n/%d/ : /%d/\n" , pids[i] , j);
+                printf(1 , "\n/%d/ : /%d/\n" , getpid() , j);
             }
 
             exit();            
