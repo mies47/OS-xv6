@@ -18,7 +18,7 @@ int main(void){
         pids[i] = fork();
         if(pids[i] == 0){
             
-            for (int j = 1; j <500; j++)
+            for (int j = 1; j <1000; j++)
             {
                 printf(1 , "\n/%d/ : /%d/\n" , pids[i] , j);
             }
