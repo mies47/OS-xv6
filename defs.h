@@ -132,6 +132,8 @@ void            my_acquire(int ,int);
 void            countTime(void);
 int             getPolicy(void);
 int             mywait(int* , int* , int*);
+void            setQuantum(int);
+int            getQuantum(void);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

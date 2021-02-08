@@ -113,10 +113,11 @@ trap(struct trapframe *tf)
   if(myproc() && myproc()->state == RUNNING &&
      tf->trapno == T_IRQ0+IRQ_TIMER){
     if(getPolicy() == 1){
-      if(myproc()->tickcounter >= QUANTUM){
+      if(myproc()->tickcounter >= getQuantum()){
         yield();
      }
-      myproc()->tickcounter++;
+     else
+        myproc()->tickcounter++;
      }
     
     else

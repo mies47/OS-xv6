@@ -113,6 +113,7 @@ extern int sys_getWaiting(void);
 extern int sys_changePolicy(void);
 extern int sys_my_acquire(void);
 extern int sys_mywait(void);
+extern int sys_setQuantum(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -146,6 +147,7 @@ static int (*syscalls[])(void) = {
 [SYS_changePolicy]    sys_changePolicy,      
 [SYS_my_acquire]  sys_my_acquire,
 [SYS_mywait]  sys_mywait,
+[SYS_setQuantum] sys_setQuantum,
 };
 
 void
