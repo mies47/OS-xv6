@@ -27,7 +27,7 @@ int main(void){
             
             for (int j = 1; j <1000; j++)
             {
-                printf(1 , "\n/%d/ : /%d/\n" , pids[i] , j);;
+                printf(1 , "\n/%d/ : /%d/\n" , getpid() , j);;
             }
 
             exit();            
