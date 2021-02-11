@@ -1,3 +1,12 @@
+NOTE: This repository is a duplicate of **mit-xv6** for x86 architecture systems
+Some new features were added including:
+- Systemcall to get parent pid
+- Systemcall to get pids of all childrens of the current process
+- Systemcall to count how many times a process ran
+
+- Round robin scheduling with custom quantom
+- Priority scheduling with priorities between 1 to 6
+
 NOTE: we have stopped maintaining the x86 version of xv6, and switched
 our efforts to the RISC-V version
 (https://github.com/mit-pdos/xv6-riscv.git)
